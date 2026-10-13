@@ -524,7 +524,7 @@ public class WndCheats extends WndTabbed {
 
 		private int depth;
 
-		public WndCheatFloor( final Window parent ){
+		public WndCheatFloor( final Window cheatWindow ){
 			super();
 
 			depth = Math.max(1, Math.min(Cheats.MAX_DEPTH, Dungeon.depth));
@@ -533,7 +533,7 @@ public class WndCheats extends WndTabbed {
 				@Override
 				protected void onClick() {
 					hide();
-					parent.hide();
+					cheatWindow.hide();
 					Cheats.travelTo(depth);
 				}
 			};
