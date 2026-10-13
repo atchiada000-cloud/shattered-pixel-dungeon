@@ -82,6 +82,11 @@ public enum Rankings {
 
 	public void submit( boolean win, Object cause ) {
 
+		//cheat: runs that used cheats are kept off the rankings
+		if (Statistics.cheatsUsed) {
+			return;
+		}
+
 		load();
 		
 		Record rec = new Record();

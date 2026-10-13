@@ -22,6 +22,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
+import com.shatteredpixel.shatteredpixeldungeon.Cheats;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
@@ -62,6 +63,13 @@ public class Hunger extends Buff implements Hero.Doom {
 
 	@Override
 	public boolean act() {
+
+		//cheat: no hunger keeps the hero fully fed
+		if (Cheats.Toggle.NO_HUNGER.on() && target instanceof Hero){
+			level = 0;
+			spend(TICK);
+			return true;
+		}
 
 		if (Dungeon.level.locked
 				|| target.buff(WellFed.class) != null

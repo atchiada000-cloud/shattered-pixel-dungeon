@@ -23,6 +23,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.wands;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
+import com.shatteredpixel.shatteredpixeldungeon.Cheats;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -486,7 +487,10 @@ public abstract class Wand extends Item {
 			}
 		}
 		
-		curCharges -= cursed ? 1 : chargesPerCast();
+		//cheat: unlimited wand charges
+		if (!Cheats.Toggle.INFINITE_WANDS.on()) {
+			curCharges -= cursed ? 1 : chargesPerCast();
+		}
 
 		//remove magic charge at a higher priority, if we are benefiting from it are and not the
 		//wand that just applied it

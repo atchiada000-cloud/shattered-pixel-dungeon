@@ -23,6 +23,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.bombs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
+import com.shatteredpixel.shatteredpixeldungeon.Cheats;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
@@ -120,7 +121,8 @@ public class Bomb extends Item {
 	@Override
 	protected void onThrow( int cell ) {
 		if (!Dungeon.level.pit[ cell ] && lightingFuse) {
-			Actor.addDelayed(fuse = createFuse().ignite(this), 2);
+			//cheat: bombs explode on impact instead of after a 2 turn fuse
+			Actor.addDelayed(fuse = createFuse().ignite(this), Cheats.Toggle.INSTANT_BOMBS.on() ? 0 : 2);
 		}
 		super.onThrow( cell );
 	}

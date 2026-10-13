@@ -76,7 +76,10 @@ public class Statistics {
 	public static boolean amuletObtained = false;
 	public static boolean gameWon = false;
 	public static boolean ascended = false;
-	
+
+	//cheat: set once any cheat is used in a run, keeps that run off the rankings
+	public static boolean cheatsUsed = false;
+
 	public static void reset() {
 		
 		goldCollected	= 0;
@@ -121,7 +124,9 @@ public class Statistics {
 		amuletObtained = false;
 		gameWon = false;
 		ascended = false;
-		
+
+		cheatsUsed = false;
+
 	}
 	
 	private static final String GOLD		= "score";
@@ -165,7 +170,9 @@ public class Statistics {
 	private static final String AMULET          = "amuletObtained";
 	private static final String WON		        = "won";
 	private static final String ASCENDED		= "ascended";
-	
+
+	private static final String CHEATS_USED     = "cheats_used";
+
 	public static void storeInBundle( Bundle bundle ) {
 		bundle.put( GOLD,		goldCollected );
 		bundle.put( DEEPEST,	deepestFloor );
@@ -211,6 +218,8 @@ public class Statistics {
 		bundle.put( AMULET,		amuletObtained );
 		bundle.put( WON,        gameWon );
 		bundle.put( ASCENDED,   ascended );
+
+		bundle.put( CHEATS_USED, cheatsUsed );
 	}
 	
 	public static void restoreFromBundle( Bundle bundle ) {
@@ -266,6 +275,8 @@ public class Statistics {
 		amuletObtained	= bundle.getBoolean( AMULET );
 		gameWon         = bundle.getBoolean( WON );
 		ascended        = bundle.getBoolean( ASCENDED );
+
+		cheatsUsed      = bundle.getBoolean( CHEATS_USED );
 	}
 	
 	public static void preview( GamesInProgress.Info info, Bundle bundle ){

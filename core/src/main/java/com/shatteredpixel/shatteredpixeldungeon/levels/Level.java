@@ -23,6 +23,7 @@ package com.shatteredpixel.shatteredpixeldungeon.levels;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
+import com.shatteredpixel.shatteredpixeldungeon.Cheats;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
@@ -768,6 +769,9 @@ public abstract class Level implements Bundlable {
 	}
 
 	public boolean spawnMob(int disLimit){
+		//cheat: no new monster spawns
+		if (Cheats.Toggle.NO_SPAWNS.on()) return false;
+
 		PathFinder.buildDistanceMap(Dungeon.hero.pos, BArray.or(passable, avoid, null));
 
 		Mob mob = createMob();

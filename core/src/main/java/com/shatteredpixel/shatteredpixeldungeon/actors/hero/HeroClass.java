@@ -102,6 +102,13 @@ public enum HeroClass {
 		hero.heroClass = this;
 		Talent.initClassTalents(hero);
 
+		giveStartingKit(hero);
+	}
+
+	//gives this class's starting equipment and items, without changing the hero's class
+	//also used by the cheat menu to reset an inventory to any class's kit
+	public void giveStartingKit( Hero hero ) {
+
 		Item i = new ClothArmor().identify();
 		if (!Challenges.isItemBlocked(i)) hero.belongings.armor = (ClothArmor)i;
 
@@ -328,6 +335,9 @@ public enum HeroClass {
 	}
 	
 	public boolean isUnlocked(){
+		//cheat: every class is available from the start
+		if (true) return true;
+
 		//always unlock on debug builds
 		if (DeviceCompat.isDebug()) return true;
 

@@ -22,6 +22,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.levels.traps;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Cheats;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Bestiary;
@@ -92,6 +93,9 @@ public abstract class Trap implements Bundlable {
 	}
 
 	public void trigger() {
+		//cheat: traps never go off
+		if (Cheats.Toggle.DISABLE_TRAPS.on()) return;
+
 		if (active) {
 			if (Dungeon.level.heroFOV[pos]) {
 				Sample.INSTANCE.play(Assets.Sounds.TRAP);

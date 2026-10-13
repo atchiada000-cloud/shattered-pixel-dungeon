@@ -21,6 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs;
 
+import com.shatteredpixel.shatteredpixeldungeon.Cheats;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
@@ -199,6 +200,8 @@ public class Shopkeeper extends NPC {
 
 	//shopkeepers are greedy!
 	public static int sellPrice(Item item){
+		//cheat: free shop items
+		if (Cheats.Toggle.FREE_SHOP.on()) return 0;
 		return item.value() * 5 * (Dungeon.depth / 5 + 1);
 	}
 	

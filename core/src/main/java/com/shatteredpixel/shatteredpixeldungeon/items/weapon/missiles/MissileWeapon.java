@@ -22,6 +22,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Cheats;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -452,6 +453,9 @@ abstract public class MissileWeapon extends Weapon {
 	protected boolean useRoundingInDurabilityCalc = true;
 
 	public float durabilityPerUse( int level ){
+		//cheat: thrown weapons never break (0 means unlimited uses)
+		if (Cheats.Toggle.UNBREAKABLE_THROWN.on()) return 0;
+
 		float usages = baseUses * (float)(Math.pow(1.5f, level));
 
 		//+50%/75% durability

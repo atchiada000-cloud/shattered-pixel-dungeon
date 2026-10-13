@@ -61,6 +61,19 @@ public class WndGame extends Window {
 		});
 		curBtn.icon(Icons.get(Icons.PREFS));
 
+		//cheat menu
+		if (Dungeon.hero != null && Dungeon.hero.isAlive()) {
+			addButton( curBtn = new RedButton( "Cheats" ) {
+				@Override
+				protected void onClick() {
+					hide();
+					GameScene.show(new WndCheats());
+				}
+			});
+			curBtn.icon(Icons.get(Icons.TALENT));
+			curBtn.textColor(Window.TITLE_COLOR);
+		}
+
 		// Challenges window
 		if (Dungeon.challenges > 0) {
 			addButton( curBtn = new RedButton( Messages.get(this, "challenges") ) {

@@ -26,6 +26,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Bones;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.GamesInProgress;
+import com.shatteredpixel.shatteredpixeldungeon.Cheats;
 import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
@@ -301,7 +302,11 @@ public class Hero extends Char {
 	private static final String LEVEL		= "lvl";
 	private static final String EXPERIENCE	= "exp";
 	private static final String HTBOOST     = "htboost";
-	
+	private static final String CHEAT_TALENTS = "cheat_talent_points";
+
+	//cheat: extra talent points granted to every unlocked tier
+	public int cheatTalentPoints = 0;
+
 	@Override
 	public void storeInBundle( Bundle bundle ) {
 
@@ -321,6 +326,7 @@ public class Hero extends Char {
 		bundle.put( EXPERIENCE, exp );
 		
 		bundle.put( HTBOOST, HTBoost );
+		bundle.put( CHEAT_TALENTS, cheatTalentPoints );
 
 		belongings.storeInBundle( bundle );
 	}
@@ -332,6 +338,7 @@ public class Hero extends Char {
 		exp = bundle.getInt( EXPERIENCE );
 
 		HTBoost = bundle.getInt(HTBOOST);
+		cheatTalentPoints = bundle.getInt(CHEAT_TALENTS);
 
 		super.restoreFromBundle( bundle );
 
@@ -409,9 +416,9 @@ public class Hero extends Char {
 			return 0;
 		} else if (buff(PotionOfDivineInspiration.DivineInspirationTracker.class) != null
 					&& buff(PotionOfDivineInspiration.DivineInspirationTracker.class).isBoosted(tier)) {
-			return 2;
+			return 2 + cheatTalentPoints;
 		} else {
-			return 0;
+			return cheatTalentPoints;
 		}
 	}
 	
@@ -735,7 +742,12 @@ public class Hero extends Char {
 		}
 
 		speed = AscensionChallenge.modifyHeroSpeed(speed);
-		
+
+		//cheat: double speed
+		if (Cheats.Toggle.DOUBLE_SPEED.on()) {
+			speed *= 2f;
+		}
+
 		return speed;
 		
 	}
@@ -789,7 +801,7 @@ public class Hero extends Char {
 
 		if (!RingOfForce.fightingUnarmed(this)) {
 			
-			return delay * belongings.attackingWeapon().delayFactor( this );
+			return Cheats.attackDelay(delay * belongings.attackingWeapon().delayFactor( this ));
 			
 		} else {
 			//Normally putting furor speed on unarmed attacks would be unnecessary
@@ -807,7 +819,7 @@ public class Hero extends Char {
 				delay = ((Weapon)belongings.weapon).augment.delayFactor(delay);
 			}
 
-			return delay/speed;
+			return Cheats.attackDelay(delay/speed);
 		}
 	}
 
@@ -838,6 +850,9 @@ public class Hero extends Char {
 		
 		//calls to dungeon.observe will also update hero's local FOV.
 		fieldOfView = Dungeon.level.heroFOV;
+
+		//cheat: apply ongoing cheat effects (invisibility, monster vision, etc.)
+		Cheats.tick(this);
 
 		if (buff(Endure.EndureTracker.class) != null){
 			buff(Endure.EndureTracker.class).endEnduring();
@@ -1627,7 +1642,7 @@ public class Hero extends Char {
 	@Override
 	public void damage( int dmg, Object src ) {
 		//cheat: god mode ignores all incoming damage
-		if (SPDSettings.godMode()) {
+		if (Cheats.Toggle.GOD_MODE.on()) {
 			return;
 		}
 
@@ -2176,7 +2191,7 @@ public class Hero extends Char {
 	public void die( Object cause ) {
 
 		//cheat: god mode also blocks instant-kill effects that bypass damage()
-		if (SPDSettings.godMode()) {
+		if (Cheats.Toggle.GOD_MODE.on()) {
 			HP = HT;
 			return;
 		}

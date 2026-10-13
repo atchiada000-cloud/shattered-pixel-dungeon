@@ -23,6 +23,7 @@ package com.shatteredpixel.shatteredpixeldungeon.actors;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
+import com.shatteredpixel.shatteredpixeldungeon.Cheats;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Electricity;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.StormCloud;
@@ -831,6 +832,11 @@ public abstract class Char extends Actor {
 		
 		if (!isAlive() || dmg < 0) {
 			return;
+		}
+
+		//cheat: one-hit kills for any damage the hero deals directly
+		if (src == Dungeon.hero && this != Dungeon.hero && Cheats.Toggle.ONE_HIT_KILL.on()){
+			dmg = Math.max(dmg, HP + shielding());
 		}
 
 		if(isInvulnerable(src.getClass())){
