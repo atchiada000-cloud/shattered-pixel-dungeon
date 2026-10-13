@@ -1,0 +1,38 @@
+name: Build unsigned iOS IPA
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [master]
+
+jobs:
+  build-ios:
+    runs-on: macos-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Build IPA (unsigned, arm64 only)
+        run: |
+          chmod +x ./gradlew
+          ./gradlew ios:createIPA \
+            -Probovm.iosSkipSigning=true \
+            -Probovm.archs=arm64 \
+            --stacktrace
+
+      - name: List RoboVM output
+        if: always()
+        run: find ios/build/robovm -maxdepth 3 -print 2>/dev/null || true
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ShatteredPixelDungeon-ipa
+          path: ios/build/robovm/**/*.ipa
+          if-no-files-found: error
