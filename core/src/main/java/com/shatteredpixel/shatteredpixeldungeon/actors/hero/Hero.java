@@ -1626,6 +1626,11 @@ public class Hero extends Char {
 
 	@Override
 	public void damage( int dmg, Object src ) {
+		//cheat: god mode ignores all incoming damage
+		if (SPDSettings.godMode()) {
+			return;
+		}
+
 		if (buff(TimekeepersHourglass.timeStasis.class) != null
 				|| buff(TimeStasis.class) != null) {
 			return;
@@ -2169,7 +2174,13 @@ public class Hero extends Char {
 
 	@Override
 	public void die( Object cause ) {
-		
+
+		//cheat: god mode also blocks instant-kill effects that bypass damage()
+		if (SPDSettings.godMode()) {
+			HP = HT;
+			return;
+		}
+
 		curAction = null;
 
 		Ankh ankh = null;
